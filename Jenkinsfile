@@ -32,13 +32,13 @@ pipeline {
         stage("Docker Build") {
             steps {
                 // Build Docker image
-                bat  'docker build -t ralmuetecentennial/mavenproject4docker:1.2 .'
+                bat  'docker build -t ralmuetecentennial/mavenproject4docker:1.3 .'
             }
         }
 
         stage('Docker Login') {
 			steps {
-				withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
+				withCredentials([usernamePassword(credentialsId: 'ralmuetecentennial', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
             bat "echo %DOCKER_HUB_PASSWORD% | docker login -u %DOCKER_HUB_USERNAME% --password-stdin"
 				}
 			}
@@ -47,7 +47,7 @@ pipeline {
         stage("Docker Push") {
             steps {
                 // Push image to Docker Hub
-                bat  'docker push ralmuetecentennial/mavenproject4docker:1.2'
+                bat  'docker push ralmuetecentennial/mavenproject4docker:1.3'
             }
         }
     }
