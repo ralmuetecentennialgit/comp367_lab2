@@ -4,10 +4,6 @@ pipeline {
         // Specify the Maven installation to use.
         maven "MAVEN3"
     }
-    environment {
-        // Retrieve Docker Hub password from Jenkins credentials
-        DOCKER_HUB_PASSWORD = credentials('CredentialID_DockerHubPWD')
-    }
     stages {
         stage("Check out") {
             steps {
