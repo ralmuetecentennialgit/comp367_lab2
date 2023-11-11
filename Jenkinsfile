@@ -15,7 +15,7 @@ pipeline {
         stage("Build Maven Project") {
             steps {
                 // Using Maven defined in the 'tools' section, no need to specify path
-                sh 'mvn clean install'
+                bat 'mvn clean install'
             }
         }
 		
