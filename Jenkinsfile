@@ -4,6 +4,10 @@ pipeline {
         // Specify the Maven installation to use.
         maven "MAVEN3"
     }
+    environment {
+        // Retrieve Docker Hub password from Jenkins credentials
+        DOCKER_HUB_PASSWORD = credentials('CredentialID_DockerHubPWD')
+    }
     stages {
         stage("Check out") {
             steps {
@@ -28,22 +32,21 @@ pipeline {
         stage("Docker Build") {
             steps {
                 // Build Docker image
-                bat  'docker build -t ralmuetecentennial/mavenproject4docker:1.3 .'
+                bat  'docker build -t ralmuetecentennial/mavenproject4docker:1.2 .'
             }
         }
 
-         stage('Docker Login') {
+       stage('Docker Login') {
             steps {
-                withCredentials([string(credentialsId: 'CredentialID_DockerHubPWD', variable: 'DOCKER_HUB_PASSWORD')]) {
-                    bat "echo %DOCKER_HUB_PASSWORD% | docker login -u ralmuetecentennial --password-stdin"
-                }
+                // Log in to Docker Hub using the environment variable for the password
+                    bat "docker login -u ralmuetecentennial -p %DOCKER_HUB_PASSWORD%"
             }
         }
 
         stage("Docker Push") {
             steps {
                 // Push image to Docker Hub
-                bat  'docker push ralmuetecentennial/mavenproject4docker:1.3'
+                bat  'docker push ralmuetecentennial/mavenproject4docker:1.2'
             }
         }
     }
