@@ -1,8 +1,10 @@
 pipeline {
     agent any
     tools {
-        // Use the Maven version configured as "M3" (or the name you have given in Jenkins configuration)
+        // Specify the Maven installation to use.
         maven "MAVEN3"
+		// Specify the Git installation to use.
+		git 'Default Git'
     }
     environment {
         // Retrieve Docker Hub password from Jenkins credentials
