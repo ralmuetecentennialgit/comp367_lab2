@@ -36,10 +36,11 @@ pipeline {
             }
         }
 
-        stage('Docker Login') {
+         stage('Docker Login') {
             steps {
-                // Use the bound credentials to login to Docker Hub
-                bat "echo %DOCKER_HUB_PASSWORD% | docker login -u ralmuetecentennial --password-stdin"
+                withCredentials([string(credentialsId: 'CredentialID_DockerHubPWD', variable: 'DOCKER_HUB_PASSWORD')]) {
+                    bat "echo %DOCKER_HUB_PASSWORD% | docker login -u ralmuetecentennial --password-stdin"
+                }
             }
         }
 
