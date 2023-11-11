@@ -1,11 +1,6 @@
 pipeline {
     agent any
-    tools {
-        // Specify the Maven installation to use.
-        maven "MAVEN3"
-		// Specify the Git installation to use.
-		git "Default git"
-    }
+   
     environment {
         // Retrieve Docker Hub password from Jenkins credentials
         DOCKER_HUB_PASSWORD = credentials('CredentialID_DockerHubPWD')
