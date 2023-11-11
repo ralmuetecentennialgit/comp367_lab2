@@ -4,7 +4,7 @@ pipeline {
         // Specify the Maven installation to use.
         maven "MAVEN3"
 		// Specify the Git installation to use.
-		git 'Default Git'
+		git "Default Git"
     }
     environment {
         // Retrieve Docker Hub password from Jenkins credentials
