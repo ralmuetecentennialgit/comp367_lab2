@@ -1,38 +1,53 @@
 pipeline {
     agent any
-   tools {
-    maven "Maven3.9"
-   }
+    tools {
+        // Use the Maven version configured as "M3" (or the name you have given in Jenkins configuration)
+        maven "MAVEN3"
+    }
+    environment {
+        // Retrieve Docker Hub password from Jenkins credentials
+        DOCKER_HUB_PASSWORD = credentials('CredentialID_DockerHubPWD')
+    }
     stages {
-        stage('Checkout') {
+        stage("Check out") {
             steps {
-                // Check out the source code
-                checkout scm
+                git url: 'https://github.com/ralmuetecentennialgit/comp367_lab2', branch: 'main'
             }
         }
 
-        stage('Build Maven Project') {
+        stage("Build Maven Project") {
             steps {
-                // Run Maven build
+                // Using Maven defined in the 'tools' section, no need to specify path
                 sh 'mvn clean install'
             }
         }
-
-    }
-
-    // Post-build actions, notifications, etc.
-    post {
-        success {
-            // Add actions to perform on success (optional)
-            echo "Build successful! Deploying to production..."
+		
+		stage("Unit Test") {
+            steps {
+                // Maven test, assuming tests are configured in your project
+                sh 'mvn test'
+            }
         }
-        failure {
-            // Add actions to perform on failure (optional)
-            echo "Build failed! Sending failure notification..."
+
+        stage("Docker Build") {
+            steps {
+                // Build Docker image
+                sh 'docker build -t ralmuetecentennial/mavenproject4docker:1.2 .'
+            }
         }
-        always {
-            // Add actions to perform regardless of build result (optional)
-            echo "Performing cleanup..."
+
+        stage("Docker Login") {
+            steps {
+                // Docker login using environment variable for password
+                sh 'echo $DOCKER_HUB_PASSWORD | docker login -u ralmuetecentennial --password-stdin'
+            }
+        }
+
+        stage("Docker Push") {
+            steps {
+                // Push image to Docker Hub
+                sh 'docker push ralmuetecentennial/mavenproject4docker:1.2'
+            }
         }
     }
 }
