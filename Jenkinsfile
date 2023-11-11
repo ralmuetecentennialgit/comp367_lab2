@@ -39,7 +39,7 @@ pipeline {
         stage("Docker Login") {
             steps {
                 // Docker login using environment variable for password
-                bat  'echo $DOCKER_HUB_PASSWORD | docker login -u ralmuetecentennial --password-stdin'
+                bat "echo %DOCKER_HUB_PASSWORD% | docker login -u %DOCKER_HUB_USERNAME% --password-stdin"
             }
         }
 
